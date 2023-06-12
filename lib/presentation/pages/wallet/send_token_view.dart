@@ -19,6 +19,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import '../../../utils/widgets/cached_image.dart';
+import '../../../utils/widgets/decimal_input_formatter.dart';
 import 'controller/token_transactions_controller.dart';
 import 'model/token_model.dart';
 
@@ -278,6 +279,7 @@ class _SendTokenviewState extends State<SendTokenview> {
                       const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                        DecimalTextInputFormatter(decimalRange: token.decimals)
                       ],
                       decoration: InputDecoration(
                           hintText: 'please enter amount',
@@ -294,27 +296,37 @@ class _SendTokenviewState extends State<SendTokenview> {
                   AppButton.long(
                     text: 'Next',
 
-                    onTap: () {
+                    onTap: () async {
+                      Get.find<HomeController>().changePageIndex(5);
+
                       _sendTokenKey.currentState?.save();
                       if (_sendTokenKey.currentState!.isValid) {
-                       Get.to( WalletTransfarePage( transfare: TransfareModel(type: 'Transfare',
-                            tokenName: token.name,
-                            tokenSym: token.symbol,
-                            balance: amountController.text,
-                            price: 25,
-                            fromAddress: token.address,
-                            toAddress: addressController.text,
-                            callBack: ()async {
-                              final bool transfar = await controller.trasnfarToken(addressController.text, amountController.text);
-                              if(transfar){
-                                showSuccessToast('Transfar was succesful');
-                                Get.back();
-                              } else {
-                                showWarningToast('We have an Error During Tranfar');
-                              }
+                        double amount = double.tryParse(_sendTokenKey.currentState!.value['amount'])??0.0;
+                        await controller.estimateFee(address: token.address, amount: amount);
+                        if(amount +  controller.estimatedFee.value <= (token.balance??0)){
 
-                            } ),));
+                      Get.to( WalletTransfarePage( transfare: TransfareModel(type: 'Transfer',
+                      tokenName: token.name,
+                      tokenSym: token.symbol,
+                      amount: amount,
+                      price: token.price??0.0,
+                      fromAddress: token.address,
+                      toAddress: addressController.text,
+                      callBack: ()async {
+                        final bool transfar = await controller.trasnfarToken(addressController.text, amountController.text);
+                      if(transfar){
+                      showSuccessToast('Transfer was successful');
+                      Get.back();
+                      Get.find<HomeController>().changePageIndex(5);
 
+                      } else {
+                      showWarningToast('We have an Error During Transfer');
+                      }
+
+                      } ),));
+                      }else{
+                      showWarningToast('Insufficient balance to transfer');
+                      }
                       } else {
                         showInfoToast('Please Enter your Address and Amount');
                       }

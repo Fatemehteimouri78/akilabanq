@@ -38,7 +38,7 @@ class _TransfarePageState extends State<TransfarePage> {
                     child: Column(
                       children: [
                         Text(
-                          "-${widget.transfare.balance}  ${widget.transfare
+                          "-${widget.transfare.amount}  ${widget.transfare
                               .tokenSym}",
                           style: AppTextStyles.black_14_w500.copyWith(
                               fontSize: 28),

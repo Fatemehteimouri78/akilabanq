@@ -12,7 +12,7 @@ class TokenTransactionController extends GetxController {
   late TokenModel currentToken;
    RxDouble currentBalance = 0.0.obs;
    RxInt currentIndex = 0.obs;
-   RxString estimatedFee = ''.obs;
+   RxDouble estimatedFee = 0.0.obs;
   RxBool loading = false.obs;
   RxBool sendLoading = false.obs;
   RxBool estimateLoading = false.obs;
@@ -23,6 +23,7 @@ class TokenTransactionController extends GetxController {
   // late RxString currentTokenPrice;
 
   setTokenModel(TokenModel token,{bool showLoading = true}) async {
+    print("[[[[[[[[[[[[[[[[[[[[[[[[[[[[object]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
     if(showLoading){
       loading.value = true;
     }
@@ -39,8 +40,8 @@ class TokenTransactionController extends GetxController {
         (timer) async {
          double? balance = await TokenTransactionsRepo.getBalance(
           currentToken.id, currentToken.address);
-         if(balance != currentBalance!.value){
-           currentBalance!.value = balance!;
+         if(balance != currentBalance.value){
+           currentBalance.value = balance!;
          }
     });
     loading.value = false;
@@ -57,13 +58,17 @@ class TokenTransactionController extends GetxController {
     return transfar;
   }
 
-  Future<void> estimateFee(String address, String amount) async {
-    estimatedFee.value = "0";
+  Future<void> estimateFee({required String address, required double amount}) async {
+    estimatedFee.value = 0;
     estimateLoading.value = true;
-    final String transfar = await TokenTransactionsRepo.estimateFee(
-        address, amount, currentToken.address,currentToken.id);
-    estimatedFee.value = transfar;
-    estimateLoading.value = false;
+   TokenTransactionsRepo.estimateFee(
+        address, amount, currentToken.address,currentToken.id).then((transfar) {
+          if(transfar is double){
+            estimatedFee.value = transfar;
+            estimateLoading.value = false;
+          }
+    });
+
   }
 
   @override

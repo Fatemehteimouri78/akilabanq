@@ -65,13 +65,13 @@ class TokenTransactionsRepo {
     }
   }
 
-  static Future<String> estimateFee(
-      String address, String amount, String fromAddress, int id) async {
+  static Future<dynamic> estimateFee(
+      String address, double amount, String fromAddress, int id) async {
     Dio dio = Dio();
     Map<String, dynamic> data = {
       "fromAddress": fromAddress,
       "toAddress": address,
-      "value": double.parse(amount),
+      "value": amount,
     };
     print("wallet/id/$id/estimate-fee");
     print(data);
@@ -84,7 +84,7 @@ class TokenTransactionsRepo {
           .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
-        return response.data["data"]["value"].toString();
+        return double.tryParse(response.data["data"]["value"].toString())??0;
       } else {
         return response.data["message"]??"something wrong";
       }

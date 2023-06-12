@@ -25,13 +25,6 @@ class _WalletTransfarePageState extends State<WalletTransfarePage> {
       Get.find<TokenTransactionController>();
 
   @override
-  void initState() {
-    controller.estimateFee(
-        widget.transfare.toAddress, widget.transfare.balance);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainPagesToolbar(
@@ -45,16 +38,17 @@ class _WalletTransfarePageState extends State<WalletTransfarePage> {
                 flex: 1,
                 child: Center(
                     child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "-${widget.transfare.balance}  ${widget.transfare.tokenSym}",
+                      "-${widget.transfare.amount}  ${widget.transfare.tokenSym}",
                       style: AppTextStyles.black_14_w500.copyWith(fontSize: 28),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     Text(
-                      '\$${widget.transfare.price}',
+                      '\$${widget.transfare.price * widget.transfare.amount}',
                       style: AppTextStyles.black_14_w500,
                     )
                   ],
@@ -79,11 +73,10 @@ class _WalletTransfarePageState extends State<WalletTransfarePage> {
                             text:
                                 '${widget.transfare.tokenName}  (${widget.transfare.tokenSym})'),
                         TransfareText(
-                            title: 'From',
-                            text: '${widget.transfare.fromAddress}'),
+                            title: 'From', text: widget.transfare.fromAddress),
                         TransfareText(
                           title: 'To',
-                          text: '${widget.transfare.toAddress}',
+                          text: widget.transfare.toAddress,
                           gotBorder: false,
                         )
                       ],
@@ -91,27 +84,28 @@ class _WalletTransfarePageState extends State<WalletTransfarePage> {
                   ),
                   SizedBox(height: 24),
                   Obx(() {
-                    return controller.estimateLoading.value ? Loading() : Container(
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TransfareText(
-                              title: 'Network Fee',
-                              text: controller.estimatedFee.value),
-                          TransfareText(
-                            title: 'Max Total',
-                            gotBorder: false,
-                            text: ((double.parse(widget.transfare.balance) -
-                                    (double.tryParse(controller.estimatedFee.value)??0))
-                                .toString()),
-                          ),
-                        ],
-                      ),
-                    );
+                    return controller.estimateLoading.value
+                        ? Loading()
+                        : Container(
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TransfareText(
+                                    title: 'Network Fee',
+                                    text: controller.estimatedFee.value.toString()),
+                                TransfareText(
+                                  title: 'Max Total',
+                                  gotBorder: false,
+                                  text:
+                                  ("${widget.transfare.amount + controller.estimatedFee.value * widget.transfare.price}"),
+                                ),
+                              ],
+                            ),
+                          );
                   }),
                   Spacer(),
                   Obx(() {
@@ -159,9 +153,7 @@ class TransfareText extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.black),
+                fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
           ),
           SizedBox(width: 24),
           Flexible(flex: 3, child: TextWithMidEllipsis(text)

@@ -4,7 +4,7 @@ class TransfareModel {
   final String type;
   final String tokenName;
   final String tokenSym;
-  final String balance;
+  final double amount;
   final double price;
   final String fromAddress;
   final String toAddress;
@@ -14,7 +14,7 @@ class TransfareModel {
     required this.type,
     required this.tokenName,
     required this.tokenSym,
-    required this.balance,
+    required this.amount,
     required this.price,
     required this.fromAddress,
     required this.toAddress,

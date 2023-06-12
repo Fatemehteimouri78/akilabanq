@@ -74,7 +74,7 @@ class _TokenTransactionsState extends State<TokenTransactions> {
                 : Column(
               children: [
                 BnbHeaderWidget(
-                    token: token, balance: controller.currentBalance!.value, tokenPrice: controller.tokenPrice!,),
+                    token: token, balance: controller.currentBalance!.value, tokenPrice: controller.tokenPrice,),
                 BnbButtonsWidget(
                   token: token,
                 ),
@@ -222,7 +222,7 @@ class BnbHeaderWidget extends StatelessWidget {
   const BnbHeaderWidget(
       {super.key, required this.token, required this.balance, required this.tokenPrice});
 
-  final TokenPrice tokenPrice;
+  final TokenPrice? tokenPrice;
   final TokenModel token;
   final double balance;
 
@@ -248,7 +248,7 @@ class BnbHeaderWidget extends StatelessWidget {
                       textDirection: TextDirection.ltr,
                       children: [
                         Text(
-                          '\$${tokenPrice.price}',
+                          '\$${tokenPrice?.price}',
                           style: AppTextStyles.greylight_14_w300,
                         ),
                         const SizedBox(
@@ -266,7 +266,7 @@ class BnbHeaderWidget extends StatelessWidget {
                           color: AppColors.tightRed,
                         ),
                         Text(
-                          tokenPrice.priceChangePercent.toString(),
+                          "${tokenPrice?.priceChangePercent}",
                           style: AppTextStyles.dark_14_w300
                               .copyWith(color: AppColors.tightRed),
                         )

@@ -157,7 +157,7 @@ class _SwapViewState extends State<SwapView> {
                                                   type: 'Exchange',
                                                   tokenName: controller.currentPair.senderName!,
                                                   tokenSym: controller.currentPair.senderSym!,
-                                                  balance: controller.valueController.text,
+                                                  amount: double.tryParse(controller.valueController.text)??0,
                                                   price: 35.0,
 
                                                   fromAddress: controller.currentPair.senderAddress!,
