@@ -15,14 +15,16 @@ class TokenTransactionsRepo {
     String endPoint =
         '/wallet/id/$id/address/$address/transactions';
     List<TransactionModel> transactions = [];
-
+    print("transactions");
+    print(endPoint);
     try {
       final response = await dio
           .get('${AppVariables.baseUrl}$endPoint',
               options: Options(
                   headers: {HttpHeaders.contentTypeHeader: "application/json"}))
-          .timeout(Duration(seconds: 10));
-
+          .timeout(const Duration(seconds: 10));
+      print("transactions");
+      print(response.toString());
       if (response.statusCode == 200) {
         print("transactions");
         print(response.toString());
@@ -33,6 +35,8 @@ class TokenTransactionsRepo {
         return transactions;
       }
     }on DioError catch (e) {
+      print("transactions");
+      print(e.response.toString());
       print(e.response);
     }
   }
@@ -122,10 +126,13 @@ class TokenTransactionsRepo {
       print(endPoint);
     }
     try {
+      print(endPoint);
       final response = await dio.get(endPoint,
           options: Options(
               headers: {HttpHeaders.contentTypeHeader: "application/json"}));
-
+      print("response.data");
+      print(response.statusCode);
+      print(response.data);
       List<dynamic> list = (response.data as List<dynamic>);
       tokenPrice = list.isNotNulOrEmpty ? TokenPrice.fromJson(list.first):null;
       return tokenPrice;

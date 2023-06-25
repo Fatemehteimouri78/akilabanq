@@ -11,18 +11,24 @@ import 'package:get/get_core/src/get_main.dart';
 
 class SeedRepository {
   static Future<List<String>> generateSeed() async {
+    print("qqqqqqqqqqqqq");
     List<String> seeds = [];
     const String endPoint = "/wallet/mnemonic/generate";
     final Dio dio = Dio();
     try {
+      print("qqqwwwwwwwwwwwwwwwwwww");
       final response = await dio
           .get("${AppVariables.baseUrl}$endPoint",
               options: Options(headers: {
                 HttpHeaders.contentTypeHeader: "application/json",
               }))
           .timeout(Duration(seconds: 10));
+      print(response.data);
+      print(response.statusCode);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(response.data);
+
         final String mnemonic = response.data['data']['mnemonic'];
         seeds = mnemonic.split(' ').toList();
         print(seeds);

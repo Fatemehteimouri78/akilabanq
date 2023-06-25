@@ -1,5 +1,6 @@
 import 'package:akilabanq/presentation/pages/swap/controller/swap_controler.dart';
 import 'package:akilabanq/presentation/pages/swap/models/pairs_model.dart';
+import 'package:akilabanq/presentation/pages/wallet/widgets/coin_text.dart';
 import 'package:akilabanq/utils/constant/text_style.dart';
 
 import 'package:akilabanq/utils/widgets/cached_image.dart';
@@ -94,10 +95,17 @@ class PairsSearchDelegate extends SearchDelegate {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            isFromPair ? currentPair.senderName! : currentPair.receiverName!,
-                            style: AppTextStyles.black_14_w500.copyWith(fontSize: 16, fontWeight: FontWeight.w700),
-                          ),
+                          RichText(
+                              textDirection: TextDirection.ltr,
+                              text: TextSpan(
+                                  text: isFromPair ? currentPair.senderName! : currentPair.receiverName!,
+                                  style: AppTextStyles.dark_14_w700,
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: " ${isFromPair ? currentPair.senderToken!.network:currentPair.receiverToken!.network}",
+                                      style: AppTextStyles.dark_14_w300,
+                                    )
+                                  ])),
                           SizedBox(
                             height: 3,
                           ),

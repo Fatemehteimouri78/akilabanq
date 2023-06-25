@@ -184,7 +184,7 @@ class BnbButtonsWidget extends StatelessWidget {
           bnbButton('Recieve', Assets.icons.svg.greenRecieve,
                   () => controller.changePageIndex(6)),
           bnbButton('Buy', Assets.icons.svg.buy, () => print('buy')),
-          bnbButton('Swap', Assets.icons.svg.swap, () => print('swap'))
+          bnbButton('Swap', Assets.icons.svg.swap, () => controller.changePageIndex(1))
         ],
       ),
     );

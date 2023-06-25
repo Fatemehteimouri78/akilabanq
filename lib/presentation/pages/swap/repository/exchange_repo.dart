@@ -65,13 +65,13 @@ class ExchangeRepo {
           await dio.get("${AppVariables.baseUrl}/exchange/pairs", options: Options(headers: {HttpHeaders.contentTypeHeader: "application/json"}));
 
       response.data['data'].forEach((pair) {
+        print("pair");
         print(pair);
         pairs.add(PairsModel.fromJson(pair));
       });
 
       return pairs;
     } on DioError catch (e) {
-      print(e.response);
     }
   }
 
@@ -79,17 +79,15 @@ class ExchangeRepo {
     Dio dio = Dio();
     double? currentEstimate = 0.0;
     var data = {"fromId": fromId.toString(), "toId": toId.toString(), "value": double.parse(value)};
-    print(data);
     try {
       final response = await dio.post("${AppVariables.baseUrl}/exchange/estimate",
           data: data, options: Options(headers: {HttpHeaders.contentTypeHeader: "application/json"}));
-      print(response);
-      print('rrrr : ${response.data['data']['value']}');
       currentEstimate = response.data['data']['value'];
       return currentEstimate;
     } on DioError catch (e) {
-      print(e.response);
-      showWarningToast(e.response!.data['message']);
+      print('sssssssssssssssssssssssssss');
+      print(e);
+      // showWarningToast(e.response!.data['message']);
       return 0.0;
     }
   }

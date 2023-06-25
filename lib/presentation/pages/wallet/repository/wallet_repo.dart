@@ -51,22 +51,22 @@ class WalletRepository {
     final String? seedData = await loadSeedPhrase(1);
     const String endPoint = '/wallet/addresses/generate';
     final Dio dio = Dio();
-    try {
-      final response = await dio.post("${AppVariables.baseUrl}$endPoint",
-          data: {"mnemonic": seedData, "deriveIndex": 1},
-          options: Options(
-              headers: {HttpHeaders.contentTypeHeader: "application/json"}));
-      print('getTokenResponse ::: $response');
+    return dio
+        .post("${AppVariables.baseUrl}$endPoint",
+            data: {"mnemonic": seedData, "deriveIndex": 1},
+            options: Options(
+                headers: {HttpHeaders.contentTypeHeader: "application/json"}))
+        .then((response) {
       if (response.statusCode == 200) {
         response.data['data'].forEach((token) {
           tokens.add(TokenModel.fromJson(token));
         });
-
       }
-    } on DioError catch (e) {
+      return tokens;
+    }).catchError((e) {
+      print("ppppppppppppppppppppppppppp");
       print(e);
-    }
-    return tokens;
+    });
   }
 
   static Future<dynamic> getTokensBalance(List<int> id) async {
@@ -75,6 +75,8 @@ class WalletRepository {
     final String idStr = id.join(',');
 
     String endPoint = '/wallet/id/$idStr/addresses/balance';
+    print(
+        "==========================================endPoint$endPoint======================================================");
 
     final String? seed = await loadSeedPhrase(1);
 
@@ -85,7 +87,6 @@ class WalletRepository {
               options: Options(
                   headers: {HttpHeaders.contentTypeHeader: "application/json"}))
           .timeout(Duration(seconds: 10));
-
 
       response.data['data'].forEach((element) {
         tokensBalance.add(TokenBalance.fromJson(element));
@@ -118,5 +119,4 @@ class WalletRepository {
       print("Erorr : $e");
     }
   }
-
 }

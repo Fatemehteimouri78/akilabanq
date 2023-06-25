@@ -29,7 +29,7 @@ class _TransfarePageState extends State<TransfarePage> {
     return Scaffold(
       appBar: MainPagesToolbar(title: widget.transfare.type,),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             Flexible(
@@ -52,7 +52,7 @@ class _TransfarePageState extends State<TransfarePage> {
                         )
                       ],
                     ))),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Flexible(
@@ -60,7 +60,7 @@ class _TransfarePageState extends State<TransfarePage> {
               child: Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(color: Colors.grey.shade300,
                         borderRadius: BorderRadius.circular(20)),
                     child: Column(
@@ -70,15 +70,15 @@ class _TransfarePageState extends State<TransfarePage> {
                             text: '${widget.transfare.tokenName}  (${widget
                                 .transfare.tokenSym})'),
                         TransfareText(title: 'From',
-                            text: '${widget.transfare.fromAddress}'),
+                            text: widget.transfare.fromAddress),
                         TransfareText(title: 'To',
-                          text: '${widget.transfare.toAddress}',
+                          text: widget.transfare.toAddress,
                           gotBorder: false
                           ,)
                       ],
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
 
                   Obx(() {
                     return controller.exchnageLoading.value ? Loading() : AppButton.long(text: 'CONFIRM', onTap: () {
@@ -109,10 +109,10 @@ class TransfareText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(border: gotBorder!
-          ? Border(bottom: BorderSide(width: 0.5, color: AppColors.lightGrey))
-          : Border()),
+          ? const Border(bottom: BorderSide(width: 0.5, color: AppColors.lightGrey))
+          : const Border()),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -120,7 +120,7 @@ class TransfareText extends StatelessWidget {
               flex: 1,
               child: Text(
                 title,
-                style: TextStyle(fontSize: 14,
+                style: const TextStyle(fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: Colors.black),
               )),

@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:akilabanq/presentation/pages/wallet/model/token_model.dart';
+
 
 
 
@@ -28,11 +30,13 @@ class PairsModel {
   double minimum;
   double maximum;
   double feeRate;
+  TokenModel? senderToken,receiverToken;
 
 
   PairsModel({
     required this.fromId,
     required this.toId,
+    this.senderToken,this.receiverToken,
     this.senderName,
     this.senderIcon,
     this.senderSym,

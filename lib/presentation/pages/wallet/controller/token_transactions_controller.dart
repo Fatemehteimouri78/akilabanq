@@ -29,7 +29,7 @@ class TokenTransactionController extends GetxController {
     }
     currentToken = token;
     transactions =
-        await TokenTransactionsRepo.getTransActions(token.id, token.address);
+        await TokenTransactionsRepo.getTransActions(token.id, token.address)??[];
     tokenPrice = await TokenTransactionsRepo.getTokenPrice(token.symbol);
     getBalance();
   }
